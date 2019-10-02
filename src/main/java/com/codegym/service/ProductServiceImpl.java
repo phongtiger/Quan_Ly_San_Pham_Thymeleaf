@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ProductServiceImpl implements ProductService {
     private static Map<Integer, Product> products;
-    private static int size = 0;
+    private static int size = 1;
     static {
         products = new HashMap<>();
         products.put(size++, new Product(1, "Iphone7", "4.7in", "iphone", 1));
