@@ -3,6 +3,14 @@
 <head th:replace="layout :: head"></head>
 <body>
 <h3>Product</h3>
+
+<form th:action="@{/products/search}" method="post" th:object="${search}">
+    <table>
+        <tr><td><input type="text" th:field="*{name}"></td></tr>
+        <tr><td><input type="submit" th:value="search"></td></tr>
+    </table>
+
+</form>
 <p>
     <a th:href="@{/product/create}">
         Add new product
@@ -36,13 +44,6 @@
     </tr>
     </tbody>
 </table>
-<form method="get" action="/products/search">
-    <div >
-        <label>Search</label>
-        <input type="text" th:field="*{search}" placeholder="Nhapten"/>
-    </div>
-    <input type="submit" value="Search"/>
-</form>
 <footer th:replace="layout :: footer"></footer>
 </body>
 </html>

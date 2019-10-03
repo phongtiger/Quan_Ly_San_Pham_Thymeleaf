@@ -3,12 +3,10 @@ package com.codegym.controller;
 import com.codegym.model.Product;
 import com.codegym.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,9 +16,11 @@ import java.util.ArrayList;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
     @GetMapping("/")
-    String showForm(Model model) {
+    public String showForm(Model model) {
         model.addAttribute("products", productService.findAll());
+        model.addAttribute("search", new Product());
         return "index";
     }
     @GetMapping("product/{id}")
@@ -59,14 +59,12 @@ public class ProductController {
         redirect.addFlashAttribute("success", "Delete product successfully!");
         return "redirect:/product/delete/"+(productService.findAll().size()+2);
     }
-    @GetMapping("products/search/")
-    public ModelAndView searchForm(@PathVariable String search,RedirectAttributes redirect) {
-        ModelAndView modelAndView = new ModelAndView("index");
-        ArrayList<Product> result = productService.findByName(search);
-        modelAndView.addObject("products", result);
-        if(result.size()==0){
-            redirect.addFlashAttribute("success", "Not found any product!");
-        }
+    @PostMapping("products/search")
+    public ModelAndView searchForm(@ModelAttribute Product product, RedirectAttributes redirect) {
+        System.out.println(product.getName());
+        System.out.println(productService.findByName(product.getName()).get(0).getName());
+        ModelAndView modelAndView=new ModelAndView("search");
+        modelAndView.addObject("products",productService.findByName(product.getName()));
         return modelAndView;
     }
 }
